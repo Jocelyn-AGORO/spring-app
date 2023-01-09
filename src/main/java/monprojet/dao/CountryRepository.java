@@ -2,6 +2,7 @@ package monprojet.dao;
 
 import java.util.List;
 
+import monprojet.dto.populationPays;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -15,4 +16,11 @@ public interface CountryRepository extends JpaRepository<Country, Integer> {
             +" FROM city"
             +" WHERE country_id = :paysId", nativeQuery = true)
     public Integer populationPourPays(Integer paysId);
+
+    @Query(value = "SELECT co.name as name, COUNT(ci.population) as population" +
+            " FROM country co" +
+            " INNER JOIN city ci" +
+            " ON(co.id = ci.country_id)" +
+            " GROUP BY co.name", nativeQuery = true)
+    public List<populationPays> populationParPays();
 }
